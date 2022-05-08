@@ -46,6 +46,12 @@ async function run() {
             const result = await equipmentCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         });
+        // add new product
+        app.post('/products', async (req, res) => {
+            const newProduct = req.body;
+            const result = await equipmentCollection.insertOne(newProduct);
+            res.send(result);
+        })
         // delete product
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id;

@@ -18,20 +18,21 @@ async function run() {
 
         const equipmentCollection = client.db('fitnessProEquipment').collection('product');
 
+        // find all products
         app.get('/products', async (req, res) => {
             const query = {};
             const cursor = equipmentCollection.find(query);
             const results = await cursor.toArray();
             res.send(results);
         });
-
+        // find single product
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await equipmentCollection.findOne(query);
             res.send(result);
-        })
-
+        });
+        // update product quantity
         app.put('/product/:id', async (req, res) => {
             const id = req.params.id;
             const updatedQuantity = req.body;
@@ -44,7 +45,14 @@ async function run() {
             };
             const result = await equipmentCollection.updateOne(filter, updateDoc, options);
             res.send(result);
-        })
+        });
+        // delete product
+        app.delete('/product/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await equipmentCollection.deleteOne(query);
+            res.send(result);
+        });
     }
     finally {
 

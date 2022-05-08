@@ -25,6 +25,7 @@ async function run() {
             const results = await cursor.toArray();
             res.send(results);
         });
+
         // find single product
         app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
@@ -32,6 +33,16 @@ async function run() {
             const result = await equipmentCollection.findOne(query);
             res.send(result);
         });
+
+        // find product for active user 
+        app.get('/userProduct', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = equipmentCollection.find(query);
+            const results = await cursor.toArray();
+            res.send(results);
+        });
+
         // update product quantity
         app.put('/product/:id', async (req, res) => {
             const id = req.params.id;
@@ -46,12 +57,14 @@ async function run() {
             const result = await equipmentCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         });
+
         // add new product
         app.post('/products', async (req, res) => {
             const newProduct = req.body;
             const result = await equipmentCollection.insertOne(newProduct);
             res.send(result);
-        })
+        });
+
         // delete product
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id;
